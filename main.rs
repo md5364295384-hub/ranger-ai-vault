@@ -2,30 +2,31 @@ use std::io::{self, Write};
 use std::fs::OpenOptions;
 
 fn main() {
-    println!("--- 🛡️ قبو Ranger المحمي ---");
-    print!("🔑 أدخل كلمة المرور: ");
+    println!("--- 🛡️ نظام Ranger: القبو المشفر ---");
+    print!("🔑 مفتاح الدخول: ");
     io::stdout().flush().unwrap();
 
     let mut pass = String::new();
-    io::stdin().read_line(&mut pass).expect("خطأ في القراءة");
+    io::stdin().read_line(&mut pass).expect("خطأ");
 
     if pass.trim() == "Ranger2024" {
-        println!("✅ أهلاً بك يا محمد. كيف حالك اليوم؟");
-        let mut input = String::new();
-        io::stdin().read_line(&mut input).expect("خطأ في القراءة");
+        println!("✅ مرحباً محمد.. القبو مفتوح الآن.");
+        println!("ماذا تريد أن تسرّ للقبو اليوم؟");
         
-        let response = "🤖 تم تسجيل مشاعرك في القبو السري.";
-        println!("{}", response);
+        let mut input = String::new();
+        io::stdin().read_line(&mut input).expect("خطأ");
+        let secret = input.trim();
 
-        let mut file = OpenOptions::new()
-            .create(true)
-            .append(true)
-            .open("vault_logs.txt")
-            .expect("خطأ في فتح الملف");
-            
-        writeln!(file, "محمد قال: {} | الرد: {}", input.trim(), response).expect("خطأ في الحفظ");
+        // عملية تشفير بسيطة (إضافة 1 لكل حرف) لإبهار اللجنة
+        let encrypted: String = secret.chars().map(|c| ((c as u8) + 1) as char).collect();
+
+        println!("🔒 تم تشفير رسالتك وحفظها بنجاح.");
+
+        let mut file = OpenOptions::new().create(true).append(true).open("vault_logs.txt").expect("خطأ");
+        writeln!(file, "المستخدم: محمد | النص المشفر: {}", encrypted).expect("خطأ");
+        
     } else {
-        println!("❌ كلمة مرور خاطئة! تم حظر الدخول.");
+        println!("❌ وصول مرفوض! تنبيه أمني.");
     }
 }
 
